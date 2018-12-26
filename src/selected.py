@@ -52,7 +52,7 @@ if __name__ == "__main__":
     # read dataset from csv
     county_facts = pd.read_csv("county_facts.csv")
     primary_resaults = pd.read_csv("primary_results.csv")
-    X = county_facts.iloc[:, 3:].values
+    X = county_facts.iloc[:, [5, 7, 8, 9, 10, 12, 17, 18, 19, 20, 21, 22, 23, 25, 27, 28, 31, 34, 40, 44]].values
     Y = normalize_results(primary_resaults)
 
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
@@ -64,8 +64,8 @@ if __name__ == "__main__":
 
     # create NN
     model = Sequential()
-    model.add(Dense(output_dim=30, init='uniform', activation='relu', input_dim=51))
-    model.add(Dense(output_dim=10, init='uniform', activation='relu'))
+    model.add(Dense(output_dim=18, init='uniform', activation='relu', input_dim=20))
+    # model.add(Dense(output_dim=10, init='uniform', activation='relu'))
     model.add(Dense(output_dim=7, init='uniform', activation='sigmoid'))
 
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])

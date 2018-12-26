@@ -33,7 +33,7 @@ def normalize_results(primary_results):
     to_return = []
     for key in results:
         best = max(results[key])
-        if best == results[key][0]:
+        if best == results[key][6]:
             to_return.append(1)
         else:
             to_return.append(0)
@@ -53,27 +53,4 @@ if __name__ == "__main__":
     rfe = RFE(model, 3)
     fit = rfe.fit(X, Y)
     print("Feature Ranking: {}".format(fit.ranking_))
-    for rank in fit.ranking_:
-        print(rank)
 
-    sys.exit()
-
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
-
-    # scale values
-    sc = StandardScaler()
-    X_train = sc.fit_transform(X_train)
-    X_test = sc.transform(X_test)
-
-    # create NN
-    model = Sequential()
-    model.add(Dense(output_dim=30, init='uniform', activation='relu', input_dim=51))
-    model.add(Dense(output_dim=15, init='uniform', activation='relu'))
-    model.add(Dense(output_dim=1, init='uniform', activation='sigmoid'))
-
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-    # fit the model
-    model.fit(X_train, Y_train, batch_size=10, epochs=100)
-    # evaluate NN
-    scores = model.evaluate(X_test, Y_test)
-    print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
