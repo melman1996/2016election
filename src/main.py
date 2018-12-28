@@ -2,8 +2,10 @@ from keras.models import Sequential
 from keras.layers import Dense
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from ann_visualizer.visualize import ann_viz
 import pandas as pd
 import numpy as np
+import sys
 
 
 def normalize_results(primary_results):
@@ -52,8 +54,11 @@ if __name__ == "__main__":
     # read dataset from csv
     county_facts = pd.read_csv("county_facts.csv")
     primary_resaults = pd.read_csv("primary_results.csv")
+    poland = pd.read_csv("poland.csv")
+
     X = county_facts.iloc[:, 3:].values
     Y = normalize_results(primary_resaults)
+    X_predict = poland.iloc[:, 3:].values
 
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
 
@@ -61,6 +66,7 @@ if __name__ == "__main__":
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
     X_test = sc.transform(X_test)
+    X_predict = sc.transform(X_predict)
 
     # create NN
     model = Sequential()
@@ -74,3 +80,6 @@ if __name__ == "__main__":
     # evaluate NN
     scores = model.evaluate(X_test, Y_test)
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
+
+    prediction = model.predict(X_predict, batch_size=None, verbose=0, steps=None)
+    print(prediction)
